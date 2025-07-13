@@ -20,9 +20,13 @@ public class MainViewModel : ViewModelBase
    {
       SayHelloCommand = ReactiveCommand.CreateFromTask(async () =>
         {
-            Description = "Thinking...";
-            await Task.Delay(1500); // Simulate async work
-            Description = $"Hello at {DateTime.Now:T}";
+           Description = "Thinking...";
+           await Task.Delay(1500); // Simulate async work
+           Description = $"Hello at {DateTime.Now:T}";
+
+           Avf.OllamaToolkit.OllamaToolkitWrapper<string> ollamaToolkitWrapper = new OllamaToolkit.OllamaToolkitWrapper<string>();
+           var result = await ollamaToolkitWrapper.GetOllamaAnswer("Answer with one word only. Give me the surname of a random German chancelor.");
+           Description = $"{result.Duration.TotalSeconds} {result.Value}";
         });
    }
 }

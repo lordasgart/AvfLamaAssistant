@@ -52,6 +52,17 @@ public class OllamaToolkitWrapper<T>
             }
             return (T)(object)booleanAnswer;
         }
+        if (typeof(T) == typeof(string))
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (var r in responses)
+            {
+                if (!r.done)
+                    sb.Append(r.response);
+
+            }
+            return (T)(object)sb.ToString();
+        }
 
         throw new NotImplementedException();
     }
