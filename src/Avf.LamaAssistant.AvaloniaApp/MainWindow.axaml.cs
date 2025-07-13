@@ -1,15 +1,35 @@
 using Avalonia.Controls;
 using Avalonia.Interactivity;
+using Avalonia.ReactiveUI;
+using Avf.LamaAssistant.AvaloniaApp.ViewModels;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Enums;
+using ReactiveUI;
 
 namespace Avf.LamaAssistant.AvaloniaApp;
 
-public partial class MainWindow : Window
+public partial class MainWindow : ReactiveWindow<MainViewModel>
 {
     public MainWindow()
     {
         InitializeComponent();
+
+        // Create and set ViewModel
+        ViewModel = new MainViewModel();
+
+        DataContext = ViewModel;
+
+        // Set up bindings
+        this.WhenActivated(disposables =>
+        {
+            // Bind ViewModel.Name <-> TextBox.Text
+            //this.Bind(ViewModel, vm => vm.Description, v => v.NameTextBox.Text)
+              //  .DisposeWith(disposables);
+
+            // Bind command
+            //this.BindCommand(ViewModel, vm => vm.SayHelloCommand, v => v.HelloButton)
+                //.DisposeWith(disposables);
+        });
     }
 
     private void SendButton_Click(object sender, RoutedEventArgs e)
