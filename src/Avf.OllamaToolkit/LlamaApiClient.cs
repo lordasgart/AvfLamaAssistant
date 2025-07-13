@@ -3,7 +3,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Avf.LamaAssistant;
+namespace Avf.OllamaToolkit;
 
 public class LlamaApiClient
 {

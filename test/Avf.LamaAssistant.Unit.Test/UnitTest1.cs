@@ -1,7 +1,9 @@
 ﻿using System.Diagnostics;
 using System.Text.Json;
+using Avf.OllamaToolkit;
 
 namespace Avf.LamaAssistant.Unit.Test;
+
 
 public class Tests
 {
@@ -13,93 +15,28 @@ public class Tests
     [Test]
     public async Task Test1()
     {
-        
-        var prompt = "Answer always with 1 for yes and 0 for no only. Do you understand?";
-        List<LlamaResponse> responses = await GetLamaResponses(prompt);
-        TimeSpan duration = GetDuration(responses);
-        string answer = GetAnswer(responses);
+        var ollamaToolkitWrapperBool = new OllamaToolkitWrapper<bool>();
 
-        bool booleanAnswer = Convert.ToBoolean(Convert.ToInt32(answer));
+        var ollamaAnswer = await ollamaToolkitWrapperBool.GetOllamaAnswer("Answer always with 1 for yes and 0 for no only. Do you understand?");
 
-        Assert.That(booleanAnswer, Is.True);
-
-        Assert.That(duration, Is.LessThan(TimeSpan.FromSeconds(10)));
-
-        Assert.That(responses, Is.Not.Null);
-        Debug.WriteLine(responses);
-    }
-
-    private static string GetAnswer(List<LlamaResponse> responses)
-    {
-        return responses[0].response;
-    }
-
-    private static TimeSpan GetDuration(List<LlamaResponse> responses)
-    {
-        var startTime = responses[0].created_at;
-        var endTime = responses[1].created_at;
-
-        var duration = endTime - startTime;
-        return duration;
-    }
-
-    private static async Task<List<LlamaResponse>> GetLamaResponses(string prompt)
-    {
-        var client = new LlamaApiClient();
-
-        string rawJson = await client.GenerateResponseAsync(prompt);
-
-        // If it's actually a raw string with escaped quotes, unescape it
-        string unescaped = System.Text.RegularExpressions.Regex.Unescape(rawJson);
-
-        // Split into lines (each line is a valid JSON object)
-        string[] jsonLines = unescaped.Split('\n', StringSplitOptions.RemoveEmptyEntries);
-
-        // Deserialize each line
-        List<LlamaResponse> responses = new();
-        foreach (string line in jsonLines)
+        Assert.Multiple(() =>
         {
-            var response = JsonSerializer.Deserialize<LlamaResponse>(line);
-            responses.Add(response);
-        }
-
-        return responses;
+            Assert.That(ollamaAnswer.Duration, Is.LessThan(TimeSpan.FromSeconds(10)));
+            Assert.That(ollamaAnswer.Value, Is.True);
+        });
     }
 
     [Test]
     public async Task Test2()
     {
-        var client = new Avf.LamaAssistant.LlamaApiClient();
-        string rawJson = await client.GenerateResponseAsync("Answer always with true for yes and false for no only. Do you understand?");
+        var ollamaToolkitWrapperBool = new OllamaToolkitWrapper<bool>();
 
-        // If it's actually a raw string with escaped quotes, unescape it
-        string unescaped = System.Text.RegularExpressions.Regex.Unescape(rawJson);
+        var ollamaAnswer = await ollamaToolkitWrapperBool.GetOllamaAnswer("Answer always with true for yes and false for no only. Do you understand?");
 
-        // Split into lines (each line is a valid JSON object)
-        string[] jsonLines = unescaped.Split('\n', StringSplitOptions.RemoveEmptyEntries);
-
-        // Deserialize each line
-        List<LlamaResponse> responses = new();
-        foreach (string line in jsonLines)
+        Assert.Multiple(() =>
         {
-            var response = JsonSerializer.Deserialize<LlamaResponse>(line);
-            responses.Add(response);
-        }
-
-        var startTime = responses[0].created_at;
-        var endTime = responses[1].created_at;
-
-        var duration = endTime - startTime;
-
-        var answer = responses[0].response;
-
-        bool booleanAnswer = Convert.ToBoolean(answer);
-
-        Assert.That(booleanAnswer, Is.True);
-
-        Assert.That(duration, Is.LessThan(TimeSpan.FromSeconds(10)));
-
-        Assert.That(responses, Is.Not.Null);
-        Debug.WriteLine(responses);
+            Assert.That(ollamaAnswer.Duration, Is.LessThan(TimeSpan.FromSeconds(10)));
+            Assert.That(ollamaAnswer.Value, Is.True);
+        });
     }
 }

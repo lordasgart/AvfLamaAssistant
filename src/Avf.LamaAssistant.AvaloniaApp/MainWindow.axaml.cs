@@ -20,12 +20,8 @@ public partial class MainWindow : Window
         //         ButtonEnum.YesNo);
 
         // var result = box.ShowAsync(); //Todo async!!!
-
-        var client = new Avf.LamaAssistant.LlamaApiClient();
-        string response = client.GenerateResponseAsync("Answer always with 1 for yes and 0 for no only. Do you understand?").Result;
-        
         var box2 = MessageBoxManager
-            .GetMessageBoxStandard("Caption", response,
+            .GetMessageBoxStandard("Caption", "Test",
                 ButtonEnum.YesNo);
 
         var result2 = box2.ShowAsync(); //Todo async!!!

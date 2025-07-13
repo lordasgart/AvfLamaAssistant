@@ -1,3 +1,5 @@
+namespace Avf.OllamaToolkit;
+
 public class LlamaResponse
 {
     public string model { get; set; }

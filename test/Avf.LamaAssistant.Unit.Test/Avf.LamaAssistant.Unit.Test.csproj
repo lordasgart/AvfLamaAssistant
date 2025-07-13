@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="../../src/Avf.LamaAssistant/Avf.LamaAssistant.csproj" />
+    <ProjectReference Include="../../src/Avf.OllamaToolkit/Avf.OllamaToolkit.csproj" />
   </ItemGroup>
 
   <ItemGroup>
