@@ -10,6 +10,16 @@
         Title="Avf.LamaAssistant.AvaloniaApp">
     <StackPanel>
         <TextBlock Name="MyTextBlock" Text="{Binding Description}"></TextBlock>
+    <TextBox
+    AcceptsReturn="True"
+    TextWrapping="Wrap"
+    MinHeight="100"
+    Text="{Binding Prompt, Mode=TwoWay}" />
+        <TextBox
+    AcceptsReturn="True"
+    TextWrapping="Wrap"
+    MinHeight="100"
+    Text="{Binding Data, Mode=TwoWay}" />
         <Button Name="MyButton" Content="Say Hello (Async)" Command="{Binding SayHelloCommand}"></Button>
     </StackPanel>
 </Window>
