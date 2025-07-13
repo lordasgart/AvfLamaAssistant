@@ -13,8 +13,41 @@ public class Tests
     [Test]
     public async Task Test1()
     {
-        var client = new Avf.LamaAssistant.LlamaApiClient();
-        string rawJson = await client.GenerateResponseAsync("Answer always with 1 for yes and 0 for no only. Do you understand?");
+        
+        var prompt = "Answer always with 1 for yes and 0 for no only. Do you understand?";
+        List<LlamaResponse> responses = await GetLamaResponses(prompt);
+        TimeSpan duration = GetDuration(responses);
+        string answer = GetAnswer(responses);
+
+        bool booleanAnswer = Convert.ToBoolean(Convert.ToInt32(answer));
+
+        Assert.That(booleanAnswer, Is.True);
+
+        Assert.That(duration, Is.LessThan(TimeSpan.FromSeconds(10)));
+
+        Assert.That(responses, Is.Not.Null);
+        Debug.WriteLine(responses);
+    }
+
+    private static string GetAnswer(List<LlamaResponse> responses)
+    {
+        return responses[0].response;
+    }
+
+    private static TimeSpan GetDuration(List<LlamaResponse> responses)
+    {
+        var startTime = responses[0].created_at;
+        var endTime = responses[1].created_at;
+
+        var duration = endTime - startTime;
+        return duration;
+    }
+
+    private static async Task<List<LlamaResponse>> GetLamaResponses(string prompt)
+    {
+        var client = new LlamaApiClient();
+
+        string rawJson = await client.GenerateResponseAsync(prompt);
 
         // If it's actually a raw string with escaped quotes, unescape it
         string unescaped = System.Text.RegularExpressions.Regex.Unescape(rawJson);
@@ -30,21 +63,7 @@ public class Tests
             responses.Add(response);
         }
 
-        var startTime = responses[0].created_at;
-        var endTime = responses[1].created_at;
-
-        var duration = endTime - startTime;
-
-        var answer = responses[0].response;
-
-        bool booleanAnswer = Convert.ToBoolean(Convert.ToInt32(answer));
-
-        Assert.That(booleanAnswer, Is.True);
-
-        Assert.That(duration, Is.LessThan(TimeSpan.FromSeconds(10)));
-
-        Assert.That(responses, Is.Not.Null);
-        Debug.WriteLine(responses);
+        return responses;
     }
 
     [Test]
