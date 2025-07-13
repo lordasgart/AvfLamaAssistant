@@ -20,5 +20,9 @@ public partial class MainWindow : Window
                 ButtonEnum.YesNo);
 
         var result = box.ShowAsync(); //Todo async!!!
+
+        var client = new Avf.LamaAssistant.LlamaApiClient();
+        string result = client.GenerateResponseAsync("Why is the sky blue?").Result;
+        Console.WriteLine(result);
     }
 }
