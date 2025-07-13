@@ -5,5 +5,9 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="Avf.LamaAssistant.AvaloniaApp.MainWindow"
         Title="Avf.LamaAssistant.AvaloniaApp">
-    Welcome to Avalonia!
+    <StackPanel>
+        <TextBlock>Eintritts-E-Mail versenden</TextBlock>
+        <Button Click="SendButton_Click">Send</Button>
+    </StackPanel>
 </Window>
+
