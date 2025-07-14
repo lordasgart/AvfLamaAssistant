@@ -39,4 +39,48 @@ public class Tests
             Assert.That(ollamaAnswer.Value, Is.True);
         });
     }
+
+    [TestCase("Answer with one sentence in one line with less then 255 characters. Summarize software development.")]
+    public async Task TestString(string input)
+    {
+        var ollamaToolkitWrapperBool = new OllamaToolkitWrapper<string>();
+
+        var ollamaAnswer = await ollamaToolkitWrapperBool.GetOllamaAnswer(input);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(ollamaAnswer.Duration, Is.LessThan(TimeSpan.FromSeconds(30)));
+            //Assert.That(ollamaAnswer.Value.Length, Is.LessThanOrEqualTo(255));
+        });
+    }
+
+    [TestCase("give me ten colors each in a new line")]
+    public async Task TestString2(string input)
+    {
+        var ollamaToolkitWrapperBool = new OllamaToolkitWrapper<string>();
+
+        var ollamaAnswer = await ollamaToolkitWrapperBool.GetOllamaAnswer(input);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(ollamaAnswer.Duration, Is.LessThan(TimeSpan.FromSeconds(30)));
+            //Assert.That(ollamaAnswer.Value.Length, Is.LessThanOrEqualTo(255));
+        });
+    }
+
+    [TestCase("give me ten colors each in a new line, no other text output")]
+    public async Task TestString3(string input)
+    {
+        var ollamaToolkitWrapperBool = new OllamaToolkitWrapper<string>();
+
+        var ollamaAnswer = await ollamaToolkitWrapperBool.GetOllamaAnswer(input);
+
+        var array = ollamaAnswer.Value.Split("\n");
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(ollamaAnswer.Duration, Is.LessThan(TimeSpan.FromSeconds(30)));
+            Assert.That(array.Length, Is.EqualTo(10));
+        });
+    }
 }

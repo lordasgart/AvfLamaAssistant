@@ -9,18 +9,28 @@
     x:DataType="local:MainViewModel"
         Title="Avf.LamaAssistant.AvaloniaApp">
     <StackPanel>
-        <TextBlock Name="MyTextBlock" Text="{Binding Description}"></TextBlock>
+        <!--TextBlock Name="MyTextBlock" Text="{Binding Description}"></TextBlock-->
+        <TextBlock Text="Prompt:"></TextBlock>
     <TextBox
     AcceptsReturn="True"
     TextWrapping="Wrap"
     MinHeight="100"
     Text="{Binding Prompt, Mode=TwoWay}" />
+    <TextBlock Text="Data:"></TextBlock>
         <TextBox
     AcceptsReturn="True"
     TextWrapping="Wrap"
     MinHeight="100"
     Text="{Binding Data, Mode=TwoWay}" />
-        <Button Name="MyButton" Content="Say Hello (Async)" Command="{Binding SayHelloCommand}"></Button>
+        <Button Name="MyButton" Content="Send Prompt and Data to" Command="{Binding SayHelloCommand}"></Button>
+        <TextBlock Text="Ollame model:"></TextBlock>
+        <TextBlock Text="llama3.1:8b"></TextBlock> <!-- TODO: Get from LlamaApiClient -->
+        <TextBox
+    AcceptsReturn="True"
+    TextWrapping="Wrap"
+    MinHeight="100"
+    Text="{Binding Description, Mode=TwoWay}" />
+    <Button Name="ExecuteCommandButton" Content="Execute Command"></Button>
     </StackPanel>
 </Window>
 

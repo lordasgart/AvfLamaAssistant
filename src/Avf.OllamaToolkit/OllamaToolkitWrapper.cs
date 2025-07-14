@@ -95,9 +95,26 @@ public class OllamaToolkitWrapper<T>
 
         // Deserialize each line
         List<LlamaResponse> responses = new();
+        var currentLine = "";
+        bool previousWasIncomplete = false;
         foreach (string line in jsonLines)
         {
-            var response = JsonSerializer.Deserialize<LlamaResponse>(line);
+            if (!line.Trim().EndsWith("\"done\":false}") && !line.Trim().EndsWith("\"done\":true}"))
+            {
+                currentLine = line;
+                previousWasIncomplete = true;
+                continue;
+            }
+            else if (previousWasIncomplete)
+            {
+                currentLine += "\\n";
+                currentLine += line;
+                previousWasIncomplete = false;
+            }
+            else
+                currentLine = line;
+
+            var response = JsonSerializer.Deserialize<LlamaResponse>(currentLine);
             if (response == null)
             {
                 throw new LlamaResponseDeserializationException($"Could not deserialize {line} from {unescaped}");
