@@ -13,7 +13,7 @@ public class LlamaResponseDeserializationException : Exception
 
 public class OllamaAnswer<T>
 {
-    public T Value { get; set; }
+    public T? Value { get; set; } = default(T);
     public TimeSpan Duration { get; set; }
 }
 
@@ -31,12 +31,12 @@ public class OllamaToolkitWrapper<T>
         var reponses = await GetLamaResponses(input.ToString());
 
         ollamaAnswer.Duration = GetDuration(reponses);
-        ollamaAnswer.Value = GetDataTypeValue(reponses);
+        ollamaAnswer.Value = GetDataTypeValue<T>(reponses);
 
         return ollamaAnswer;
     }
 
-    private T GetDataTypeValue(List<LlamaResponse> responses)
+    private T GetDataTypeValue<T>(List<LlamaResponse> responses)
     {
         if (typeof(T) == typeof(bool))
         {
@@ -62,6 +62,12 @@ public class OllamaToolkitWrapper<T>
 
             }
             return (T)(object)sb.ToString();
+        }
+        if (typeof(T) == typeof(string[]))
+        {
+            string str = GetDataTypeValue<string>(responses);
+            var array = str.Split("\n");
+            return (T)(object)array;
         }
 
         throw new NotImplementedException();

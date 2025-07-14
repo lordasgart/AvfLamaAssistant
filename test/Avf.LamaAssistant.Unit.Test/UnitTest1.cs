@@ -71,16 +71,16 @@ public class Tests
     [TestCase("give me ten colors each in a new line, no other text output")]
     public async Task TestString3(string input)
     {
-        var ollamaToolkitWrapperBool = new OllamaToolkitWrapper<string>();
+        var ollamaToolkitWrapperBool = new OllamaToolkitWrapper<string[]>();
 
         var ollamaAnswer = await ollamaToolkitWrapperBool.GetOllamaAnswer(input);
 
-        var array = ollamaAnswer.Value.Split("\n");
+        var array = ollamaAnswer.Value;
 
         Assert.Multiple(() =>
         {
             Assert.That(ollamaAnswer.Duration, Is.LessThan(TimeSpan.FromSeconds(30)));
-            Assert.That(array.Length, Is.EqualTo(10));
+            Assert.That(array!.Length, Is.EqualTo(10));
         });
     }
 }
